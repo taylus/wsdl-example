@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://example.com/FooService"
+    targetNamespace="http://example.com/FooService"
+    xmlns:Foo="http://example.com/FooService/Foo">
+ 
+  <!-- import external XSD files that define the contents of messages -->
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import schemaLocation="foo.xsd" namespace="http://example.com/FooService/Foo"/>
+    </xsd:schema>
+  </wsdl:types>
+ 
+  <!-- define messages used as input and output by the web methods -->
+  <wsdl:message name="FooRequest">
+    <wsdl:part name="partname" element="Foo:FooRequest"/>
+  </wsdl:message>
+  <wsdl:message name="FooResponse">
+    <wsdl:part name="partname" element="Foo:FooResponse"/>
+  </wsdl:message>
+ 
+  <!-- define the service's abstract interface (the web methods and what messages they use for input and output) -->
+  <wsdl:portType name="FooServiceInterface">
+    <wsdl:operation name="Foo">
+      <wsdl:documentation>Does an extremely unspecified something.</wsdl:documentation>
+      <wsdl:input message="tns:FooRequest"/>
+      <wsdl:output message="tns:FooResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+ 
+  <!-- define a SOAP binding to the interface described above, using the document/literal style -->
+  <wsdl:binding name="FooServiceBinding" type="tns:FooServiceInterface">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Foo">
+      <soap:operation style="document" soapAction="http://example.com/FooService/Foo"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  
+  <!-- define a web service offering an endpoint for the SOAP binding -->
+  <wsdl:service name="FooService">
+    <wsdl:documentation>This web service exposes operations that foo, bar, and baz.</wsdl:documentation>
+    <wsdl:port name="FooPort" binding="tns:FooServiceBinding">
+        <soap:address location="http://www.example.com/FooService"/>
+    </wsdl:port>
+  </wsdl:service>
+ 
+</wsdl:definitions>
